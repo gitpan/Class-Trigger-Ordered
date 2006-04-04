@@ -1,0 +1,96 @@
+
+NAME
+    Class::Trigger::Ordered - A little flexibility was added to Class::Trigger
+
+VERSION
+
+    Version 0.01
+
+DESCRIPTION
+
+    In the beginning: Refer to Class::Trigger.
+
+    Class::Trigger::Ordered enables the operation of the order by which
+    the trigger is called by installing priority when the trigger point is set.
+
+INSTALLATION
+
+    To install this module, run the following commands:
+
+        perl Makefile.PL
+        make
+        make test
+        make install
+
+SYNOPSIS
+
+        package Foo;
+        use Class::Trigger::Ordered qw(INIT_HOOK FINAL_HOOK);
+    
+        sub new { bless, {}, shift }
+    
+        sub run {
+            my $self = shift;
+            $self->call_trigger('INIT_HOOK');
+            # Some codes
+            $self->call_trigger('FINAL_HOOK');
+        }
+    
+        package Bar;
+        use base qw(Foo);
+    
+        __PACKAGE__->add_trigger('INIT_HOOK:50'  => \&sub1);
+        __PACKAGE__->add_trigger('FINAL_HOOK:50' => \&sub2);
+    
+        package Baz;
+        use base qw(Bar);
+    
+        __PACKAGE__->add_trigger('INIT_HOOK:20' => \&sub0);
+    
+        package main;
+    
+        Bar->run;       # called in order of sub1, sub2
+    
+        Baz->run;       # called in order of sub0, sub1, and sub2
+        
+        my $baz = Baz->new;
+    
+        $baz->add_trigger('FINAL_HOOK:20' => \&sub1_5);
+    
+        $baz->run;      # called in order of sub0, sub1, sub1_5, and sub2
+
+FUNCTIONS
+
+    add_trigger
+
+    call_trigger
+
+        See also Class::Trigger::->call_trigger.
+
+    add_triggerpoints
+
+SEE ALSO
+
+    Class::Trigger, Class::Data::Inheritable.
+
+    And, this module was made referring to one entry of famous certain blog :
+
+    http://blog.bulknews.net/mt/archives/001859.html
+
+    Special thanks
+
+        Tatsuhiko Miyagawa
+
+BUGS
+
+    Please send the patch at any time when there are a bug and an improvement!
+
+
+AUTHOR
+
+    Satoshi Ohkubo <s.ohkubo@gmail.com>
+
+LICENSE
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.

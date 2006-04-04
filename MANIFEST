@@ -1,0 +1,15 @@
+Changes
+MANIFEST
+Makefile.PL
+README
+lib/Class/Trigger/Ordered.pm
+t/00-load.t
+t/01-trigger.t
+t/02-ordered.t
+t/03-object.t
+t/lib/Foo/Bar.pm
+t/lib/Foo.pm
+t/boilerplate.t
+t/pod-coverage.t
+t/pod.t
+META.yml                                 Module meta-data (added by MakeMaker)
